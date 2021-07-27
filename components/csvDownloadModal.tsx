@@ -1,6 +1,6 @@
 import { Button, CircularProgress, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, DialogTitle, DialogContent, DialogContentText, DialogActions, LinearProgress } from '@material-ui/core';
 import MaterialTable, { Column } from 'material-table';
-import { getErrorMessage } from './errorFormating';
+import { getErrorMessage } from './errorFormatting';
 import download from 'downloadjs';
 import { Parser } from 'json2csv';
 import { ApolloError } from '@apollo/client';
@@ -40,7 +40,7 @@ const flattenObject = (ob: any) => {
 const csvDownloadModal = (props: csvDownloadProps) => {
     if (!props.topic) {
         return <div>
-            Internal Error: CSV Download recieved no topic.
+            Internal Error: CSV Download received no topic.
         </div>
     }
     console.log(props);
@@ -72,16 +72,16 @@ const csvDownloadModal = (props: csvDownloadProps) => {
                 onDownloadModalFinish(false)
             }} color="primary" disabled={props.csvLinkLoading}>
                 Save CSV
-        </Button>
+            </Button>
         }
         if (rowData.length === 0) {
             return <div>The ${props.topic} buffer is empty.</div>
         } else {
-            const colomnHeaders = Object.keys(rowData[0]).map(key => { return { title: key, field: key, type: typeof rowData[0][key], editable: 'never' } }) as Array<Column<any>>;
+            const columnHeaders = Object.keys(rowData[0]).map(key => { return { title: key, field: key, type: typeof rowData[0][key], editable: 'never' } }) as Array<Column<any>>;
             return (<>
                 <DialogContent>
                     <DialogContentText id="download-modal-description">
-                        <MaterialTable title={`Downloading ${props.topic}`} columns={colomnHeaders} data={rowData/*query => new Promise((accept, reject) => {
+                        <MaterialTable title={`Downloading ${props.topic}`} columns={columnHeaders} data={rowData/*query => new Promise((accept, reject) => {
                             accept({ data: rowData, page: 1, totalCount: 1 })
                         })
                     */}>
@@ -92,7 +92,7 @@ const csvDownloadModal = (props: csvDownloadProps) => {
                 <DialogActions>
                     <Button onClick={() => onDownloadModalFinish(false)} color="primary">
                         Cancel
-                        </Button>
+                    </Button>
                     {downloadCSVButton}
                 </DialogActions>
             </>)

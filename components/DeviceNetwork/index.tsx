@@ -52,14 +52,14 @@ const devicenetwork = (props: any) => {
     }
   })
   if (network) {
-    const redneredDevices = network.map(device => {
+    const renderedDevices = network.map(device => {
       console.log(device);
       return (<>
         <DeviceNode device={device} key={device.uri} />
       </>)
     })
     return (<Container>
-      {redneredDevices}
+      {renderedDevices}
     </Container>)
   } else {
     return (<Container maxWidth="sm"><h1>Device Network Loading</h1><CircularProgress /></ Container>)

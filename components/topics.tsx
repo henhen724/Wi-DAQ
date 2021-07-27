@@ -3,7 +3,7 @@ import MaterialTable, { Column } from 'material-table';
 import { Button, CircularProgress, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton, LinearProgress, TextField, Tooltip } from '@material-ui/core';
 import { Replay as ReplayIcon, GetApp as GetAppIcon, FiberManualRecord as RecordCircle, FiberManualRecordOutlined as EmptyRecordCircle } from '@material-ui/icons';
 
-import { getErrorMessage } from './errorFormating';
+import { getErrorMessage } from './errorFormatting';
 
 import { ArchiveCSVDownload, ArchiveDataPreview, AbrvTopicInfo, TopicsQuery, TopicsQueryRslt, RecordTopic, DeleteTopicRecord, ArchiveDataQueryInput, TopicsSubscription } from "./apollo/Topics";
 import CsvDownloadModal from './csvDownloadModal';

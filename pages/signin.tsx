@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { gql, useMutation, useApolloClient } from '@apollo/client';
-import { getErrorMessage } from '../components/errorFormating';
+import { getErrorMessage } from '../components/errorFormatting';
 import { TextField, Button, Container, Paper, Grid } from '@material-ui/core';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 

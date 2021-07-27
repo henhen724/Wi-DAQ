@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 import { Container, CircularProgress, Typography } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Navbar from '../../components/Navbar';
-import { getErrorMessage } from '../../components/errorFormating';
+import { getErrorMessage } from '../../components/errorFormatting';
 
 import DisplaySchema from '../../components/DeviceNetwork/DisplaySchema';
 
@@ -48,7 +48,7 @@ const aDevice = () => {
         return (<Container maxWidth="sm"><h1>Loading Device Info</h1><CircularProgress /></ Container>);
     } else if (error) {
         console.error(error);
-        return (<Container maxWidth="sm"><h1>An error has occured</h1>{getErrorMessage(error)}</ Container>);
+        return (<Container maxWidth="sm"><h1>An error has occurred</h1>{getErrorMessage(error)}</ Container>);
     } else if (data) {
         if (data.deviceByIp) {
             const { deviceSchema, name, osName } = data.deviceByIp;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getErrorMessage } from './errorFormating';
+import { getErrorMessage } from './errorFormatting';
 import { UnionPanelSettings, UnionPanelProps, getPanelFromProps } from './Panel';
 import { DataQuery, DataSubscription, SendMqttPacket } from './apollo/Data';
 
@@ -62,7 +62,7 @@ const livedata = (props: DashboardProps) => {
     }));
     const renderedData = props.dataElements.map((settings, index) => {
         var panel = (<h1>Error:No panel loaded</h1>);
-        return (<div className="panel-wraper" key={index.toString() + "-panel"}>
+        return (<div className="panel-wrapper" key={index.toString() + "-panel"}>
             {getPanelFromProps({ settings, data, mqttPublish } as UnionPanelProps)}
         </div>)
     });

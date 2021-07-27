@@ -4,7 +4,7 @@ import { useQuery, useMutation, useSubscription } from '@apollo/client';
 import Link from 'next/link';
 import { IconButton, MenuItem, Menu, Badge, Typography, Tooltip, Card, CardContent } from '@material-ui/core';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
-import { getErrorMessage } from '../errorFormating';
+import { getErrorMessage } from '../errorFormatting';
 import { Notifications as NotificationsIcon } from '@material-ui/icons';
 import { CircularProgress } from '@material-ui/core';
 
@@ -46,7 +46,7 @@ subscription WatchDeletedNotifications{
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        unviewedNotification: {
+        unvisitedNotification: {
             backgroundColor: theme.palette.secondary.main
         }
     }),
@@ -120,7 +120,7 @@ export default function notificationBell() {
         key={noto._id}
     >
         <MenuItem onClick={() => viewNoto({ variables: { id: noto._id } })}>
-            <Card className={noto.viewed ? "" : classes.unviewedNotification} >
+            <Card className={noto.viewed ? "" : classes.unvisitedNotification} >
                 <CardContent>
                     <Typography variant="h5" component="h2">
                         {noto.name}

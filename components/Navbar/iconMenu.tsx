@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client';
-import { getErrorMessage } from '../errorFormating';
+import { getErrorMessage } from '../errorFormatting';
 import { CircularProgress } from '@material-ui/core';
 
 import BrightnessIcon from './brightnessIcon';

@@ -5,7 +5,7 @@ import { Container, CircularProgress, Paper, Grid, IconButton, Typography } from
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Delete as DeleteIcon, LocalConvenienceStoreOutlined } from '@material-ui/icons';
 import Navbar from '../../components/Navbar';
-import { getErrorMessage } from '../../components/errorFormating';
+import { getErrorMessage } from '../../components/errorFormatting';
 import { DateTime } from 'luxon';
 DateTime.local()
 
@@ -67,7 +67,7 @@ const aNotification = () => {
     if (loading) {
         return (<Container maxWidth="sm"><h1>Loading Notification</h1><CircularProgress /></ Container>);
     } else if (error) {
-        return (<Container maxWidth="sm"><h1>An error has occured</h1>{getErrorMessage(error)}</ Container>);
+        return (<Container maxWidth="sm"><h1>An error has occurred</h1>{getErrorMessage(error)}</ Container>);
     } else if (data) {
         if (data.notificationById) {
             const { name, topic, message, mqttMessage, received } = data.notificationById;

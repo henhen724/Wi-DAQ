@@ -6,7 +6,7 @@ import { Replay as ReplayIcon } from '@material-ui/icons';
 import { Watchdog } from "../server/models/Watchdog";
 import { WatchdogsQuery, SetWatchdog, DeleteWatchdog } from "./apollo/Watchdogs";
 
-import { getErrorMessage } from './errorFormating';
+import { getErrorMessage } from './errorFormatting';
 
 interface WatchdogDisplay {
     name: string,
@@ -25,7 +25,7 @@ const AlarmsPage = () => {
     const [state, setState] = useState<TableState>({
         columns: [
             { title: 'Name', field: 'name', type: 'string', editable: 'onAdd' },
-            { title: 'Topics (Comma Seperated)', field: 'topicsString', type: 'string', editable: 'always' },
+            { title: 'Topics (Comma Separated)', field: 'topicsString', type: 'string', editable: 'always' },
             { title: 'Alarm Message', field: 'messageString', type: 'string', editable: 'always' },
         ],
         data: [],
