@@ -32,7 +32,7 @@ class TopicInfo {
     @Field()
     expires: boolean;
     @Field(type => Int, { nullable: true })
-    experationTime: number;
+    expirationTime: number;
     @Field()
     sizeLimited: boolean;
     @Field(type => Int, { nullable: true })
@@ -67,7 +67,7 @@ class DataPacket {
     created: Date;
     @Field(type => GraphQLJSON, { description: "The mqtt payload parsed as JSON.  If it parse fails, returns an empty object." })
     data: Object;
-    @Field(type => String, { description: "This feild is the rawBytes of the mqtt packet UTF-8 encoded.  It is only included if the packet is not valid json.", nullable: true })
+    @Field(type => String, { description: "This field is the rawBytes of the mqtt packet UTF-8 encoded.  It is only included if the packet is not valid json.", nullable: true })
     rawData?: Buffer;
 }
 
@@ -94,7 +94,7 @@ class RecordTopicInput {
     @Field({ nullable: true })
     expires?: boolean;
     @Field(type => Int, { nullable: true })
-    experationTime?: number;
+    expirationTime?: number;
     @Field({ nullable: true })
     sizeLimited?: boolean;
     @Field(type => Int, { nullable: true })
@@ -123,7 +123,7 @@ class ArchivePacket {
     data: Object;
 }
 
-const ArchiveConnectionOuput = createConnectionOutput(ArchivePacket);
+const ArchiveConnectionOutput = createConnectionOutput(ArchivePacket);
 
 @ArgsType()
 class ArchiveDataInput extends ConnectionInput {
@@ -195,7 +195,7 @@ class TopicResolver {
     }
     @Mutation(returns => SuccessBoolean)
     async recordTopic(@Args() input: RecordTopicInput) {
-        const { topic, freqLimited, maxFreq, expires, experationTime, sizeLimited, maxSize } = input;
+        const { topic, freqLimited, maxFreq, expires, expirationTime, sizeLimited, maxSize } = input;
         const topicInfos = await TopicInfoModel.find({ topic }) as Document<DBTopicInfo>[];
         switch (topicInfos.length) {
             case 0:
@@ -203,7 +203,7 @@ class TopicResolver {
                 await newBufInfo.save();
                 return { success: true };
             case 1:
-                await (TopicInfoModel as Model<Document<DBTopicInfo>>).updateOne({ topic }, input);
+                await TopicInfoModel.updateOne({ topic }, input);
                 return { success: true };
             default:
                 throw new Error(`Topic ${topic} has ${topicInfos.length} topic info entries, but topic topic info must be unique.`);
@@ -259,7 +259,7 @@ class TopicResolver {
 
         let data = "";
 
-        const bufferTranform = new Transform({
+        const bufferTransform = new Transform({
             transform(chunk: Buffer, encoding: BufferEncoding, callback: TransformCallback) {
                 data += chunk.toString();
                 if (data.length > 1000000) {
@@ -275,14 +275,11 @@ class TopicResolver {
                 callback();
             }
         });
-        const csvStream = pipeline(ArchiveDataPacketModel.find(query).cursor({ batchSize: 10000 }), getDataTransform,
-            json2csv,
-            bufferTranform,
-            (err: any) => {
-                if (err) {
-                    console.error(err);
-                }
-            });
+        const csvStream = ArchiveDataPacketModel.find(query).cursor({ batchSize: 10000 })
+            .pipe(getDataTransform as any)
+            .pipe(json2csv)
+            .pipe(bufferTransform)
+            .catch((err: any) => console.error(err));
 
         const fileName = `${topic}-${v4()}.csv`;
 
@@ -303,7 +300,7 @@ class TopicResolver {
 
         return resData.Location;
     }
-    @Query(returns => ArchiveConnectionOuput)
+    @Query(returns => ArchiveConnectionOutput)
     async archiveData(@Args() input: ArchiveDataInput) {
         const { topic, from, to, first, after } = input;
         var query = { topic } as { topic: string, created?: { $gte?: Date, $lte?: Date } };

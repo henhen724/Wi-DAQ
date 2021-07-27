@@ -5,7 +5,7 @@ import { GraphQLClient, request, gql } from 'graphql-request';
 let currWatchdogs = null as Watchdog[] | null;
 let topics = null as string[] | null;
 
-export const alarmListner = (client: GraphQLClient, msgTopic: string, message: Buffer) => {
+export const alarmListener = (client: GraphQLClient, msgTopic: string, message: Buffer) => {
     if (currWatchdogs && topics && topics.find(topic => topic === msgTopic)) {
         currWatchdogs.forEach(currWatch => {
             if (currWatch.topics.find(topic => topic === msgTopic)) {
@@ -27,7 +27,7 @@ export const alarmListner = (client: GraphQLClient, msgTopic: string, message: B
     }
 }
 
-export const updateTopicSubsriptions = async (client: MqttClient) => {
+export const updateTopicSubscriptions = async (client: MqttClient) => {
     currWatchdogs = (await WatchdogModel.find()) as Watchdog[];
     topics = currWatchdogs.reduce((topicsSoFar, { topics }) => topicsSoFar.concat(topics), [] as string[]);
     if (topics.length !== 0) {
@@ -39,5 +39,5 @@ export const updateTopicSubsriptions = async (client: MqttClient) => {
 }
 
 export default (client: MqttClient) => {
-    setInterval(() => updateTopicSubsriptions(client), 1000);
+    setInterval(() => updateTopicSubscriptions(client), 1000);
 }

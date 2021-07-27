@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider as MuiThemeProvider, createMuiTheme, darken, } from '@material-ui/core/styles';
+import { ThemeProvider as MuiThemeProvider, createTheme, darken, } from '@material-ui/core/styles';
 import { red, blue } from '@material-ui/core/colors';
 import { getCookie, setCookie } from '../server/lib/style-cookies';
 
@@ -76,7 +76,7 @@ export default function theme(props: any) {
     }, [direction]);
 
     const theme = React.useMemo(() => {
-        const nextTheme = createMuiTheme(
+        const nextTheme = createTheme(
             {
                 direction,
                 palette: {

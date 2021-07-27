@@ -61,6 +61,7 @@ function SignIn() {
       }
     } catch (error) {
       setErrorMsg(getErrorMessage(error))
+      console.log(error);
     }
   }
 

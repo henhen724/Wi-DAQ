@@ -1,5 +1,5 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import mongoose, { CallbackError } from 'mongoose';
 import AWS from 'aws-sdk';
 AWS.config.update({ region: 'us-east-2' })
 
@@ -7,7 +7,7 @@ import { MongoError } from 'mongodb';
 import { createServer } from 'http';
 import next from 'next';
 import { ApolloServer } from 'apollo-server-express';
-const nextApp = next({ dev: process.env.NODE_ENV !== 'production' }); //This loads all of the enviroment varibles
+const nextApp = next({ dev: process.env.NODE_ENV !== 'production' }); //This loads all of the environment variables
 const nextHandler = nextApp.getRequestHandler();
 
 import makeSchema from './apollo/schema';
@@ -22,17 +22,17 @@ const PORT = process.env.PORT || "3000";
 
 const startServer = async () => {
     await nextApp.prepare();
-    await mongoose.connect(`${process.env.MONGODB_PROTO}${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_DOMAIN}`,
+    await mongoose.connect(`${process.env.MONGODB_URI}`,
         {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
         },
-        (err: MongoError) => {
+        (err: CallbackError) => {
             if (err) {
                 console.error(err);
             } else {
-                console.log(`🗃️ Connected to the database at ${process.env.MONGODB_PROTO}${process.env.MONGODB_DOMAIN}`);
+                console.log(`🗃️ Connected to the mongoDB database.`);
             }
         }
     );

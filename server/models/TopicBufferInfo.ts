@@ -20,10 +20,10 @@ export class DBTopicInfo {
     @prop({ required: true, default: false })
     expires!: boolean;
     @prop({ required: false })
-    experationTime?: number;
+    expirationTime?: number;
     @prop({ required: true, default: true })
     sizeLimited!: boolean;
-    @prop({ required: false, default: 2000 }) // If not spesified, set a 2KB size limit on the rolling buffer.
+    @prop({ required: false, default: 2000 }) // If not specified, set a 2KB size limit on the rolling buffer.
     maxSize?: number;
 }
 

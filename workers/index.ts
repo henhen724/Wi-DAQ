@@ -1,26 +1,27 @@
-require('dotenv').config({ path: '.env.local' })
-import mongoose from 'mongoose';
+require('dotenv').config()
+import mongoose, { CallbackError } from 'mongoose';
 import { MongoError } from 'mongodb';
-import rollingBuffer, { bufferListner, archiveListner } from './runningBuffer';
-import handleAlarms, { alarmListner } from './alarmHandlers';
-import deviceNetworkStart, { deviceNetworkListner } from './deviceNetwork';
+import rollingBuffer, { bufferListener, archiveListener } from './runningBuffer';
+import handleAlarms, { alarmListener } from './alarmHandlers';
+import deviceNetworkStart, { deviceNetworkListener } from './deviceNetwork';
 import mqttConnect from '../server/lib/mqttConnect';
 import { GraphQLClient } from 'graphql-request';
 
 
 const runWorkers = async () => {
-    await mongoose.connect(`${process.env.MONGODB_PROTO}${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_DOMAIN}`,
+    await mongoose.connect(`${process.env.MONGODB_URI}`,
         {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
         },
-        (err: MongoError) => {
+        (err: CallbackError) => {
             if (err) {
                 console.error(`🤖🟥🗃️ Worker failed to connect to the database.`);
                 console.error(err);
+                console.log(process.env.MONGODB_URI);
             } else {
-                console.log(`🤖📡🗃️ Worker connected to the database at ${process.env.MONGODB_PROTO}${process.env.MONGODB_DOMAIN}`);
+                console.log(`🤖📡🗃️ Worker connected to the database`);
             }
         }
     );
@@ -35,10 +36,10 @@ const runWorkers = async () => {
     });
 
     mqttClient.on("message", (msgTopic, message) => {
-        bufferListner(msgTopic, message);
-        archiveListner(msgTopic, message);
-        alarmListner(gqlClient, msgTopic, message);
-        deviceNetworkListner(gqlClient, msgTopic, message);
+        bufferListener(msgTopic, message);
+        archiveListener(msgTopic, message);
+        alarmListener(gqlClient, msgTopic, message);
+        deviceNetworkListener(gqlClient, msgTopic, message);
     });
     rollingBuffer(mqttClient);
     handleAlarms(mqttClient);

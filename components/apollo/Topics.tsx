@@ -73,7 +73,7 @@ query TopicsQuery {
 export interface TopicInfo {
     topic: string;
     expires: boolean;
-    experationTime: number;
+    expirationTime: number;
     sizeLimited: boolean;
     maxSize: number;
     freqLimited: boolean;
@@ -125,13 +125,13 @@ export const TopicsSubscription = (opts: SubscriptionHookOptions<TopicSubRslt, {
 
 export interface RecordTopicInput {
     topic: string,
-    experationTime?: number,
+    expirationTime?: number,
     maxSize?: number,
 }
 
 export const RecordTopicGQL = gql`
-mutation RecordTopic($topic:String!, $experationTime: Int, $maxSize: Int, $recordArchive: Boolean, $recordRollingBuffer: Boolean) {
-  recordTopic(topic: $topic, experationTime: $experationTime, maxSize: $maxSize, recordArchive: $recordArchive, recordRollingBuffer: $recordRollingBuffer) {
+mutation RecordTopic($topic:String!, $expirationTime: Int, $maxSize: Int, $recordArchive: Boolean, $recordRollingBuffer: Boolean) {
+  recordTopic(topic: $topic, expirationTime: $expirationTime, maxSize: $maxSize, recordArchive: $recordArchive, recordRollingBuffer: $recordRollingBuffer) {
     success
   }
 }

@@ -3,7 +3,7 @@ import { GraphQLClient, request, gql } from 'graphql-request';
 
 const PORT = process.env.PORT || "3000";
 
-export const deviceNetworkListner = async (client: GraphQLClient, msgTopic: string, messageStr: Buffer) => {
+export const deviceNetworkListener = async (client: GraphQLClient, msgTopic: string, messageStr: Buffer) => {
     // console.log(`${msgTopic}:${messageStr.toString()}`);
     let message = null;
     try {

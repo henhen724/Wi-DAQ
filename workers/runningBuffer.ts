@@ -6,7 +6,7 @@ import BufferInfoModel, { DBTopicInfo } from '../server/models/TopicBufferInfo';
 
 let topicBufferInfos = null as DBTopicInfo[] | null;
 
-export const bufferListner = (msgTopic: string, message: Buffer) => {
+export const bufferListener = (msgTopic: string, message: Buffer) => {
     if (topicBufferInfos) {
         const bufferInfo = topicBufferInfos.find(({ topic, recordRollingBuffer }) => recordRollingBuffer && topic === msgTopic);
         if (bufferInfo) {
@@ -19,12 +19,12 @@ export const bufferListner = (msgTopic: string, message: Buffer) => {
                     let newPacketObj = {
                         created: currTime,
                         expires: bufferInfo.expires,
-                        experationDate: undefined as Date | undefined,
+                        expirationDate: undefined as Date | undefined,
                         topic: msgTopic,
                         data: msgObj,
                     };
-                    if (bufferInfo.expires && bufferInfo.experationTime) {
-                        newPacketObj.experationDate = new Date(currTime.getDate() + bufferInfo.experationTime);
+                    if (bufferInfo.expires && bufferInfo.expirationTime) {
+                        newPacketObj.expirationDate = new Date(currTime.getDate() + bufferInfo.expirationTime);
                     }
                     const newPacket = new DataPacket(newPacketObj);
                     newPacket.save();
@@ -36,7 +36,7 @@ export const bufferListner = (msgTopic: string, message: Buffer) => {
     }
 }
 
-export const archiveListner = (msgTopic: string, message: Buffer) => {
+export const archiveListener = (msgTopic: string, message: Buffer) => {
     if (topicBufferInfos) {
         const bufferInfo = topicBufferInfos.find(({ topic, recordArchive }) => recordArchive && topic === msgTopic);
         if (bufferInfo) {
@@ -63,8 +63,8 @@ export const removeExpiredPackets = async () => {
     if (topicBufferInfos) {
         for (var i = 0; i < topicBufferInfos.length; i++) {
             const bufferInfo = topicBufferInfos[i];
-            if (bufferInfo.expires && bufferInfo.experationTime) {
-                const creationTimeOfExpPacket = new Date(Date.now() - bufferInfo.experationTime);
+            if (bufferInfo.expires && bufferInfo.expirationTime) {
+                const creationTimeOfExpPacket = new Date(Date.now() - bufferInfo.expirationTime);
                 DataPacket.deleteMany({ topic: bufferInfo.topic, created: { $lte: creationTimeOfExpPacket } }, (err: any) => {
                     if (err)
                         console.error(err);
@@ -83,7 +83,7 @@ export const removePacketsOverMemLimit = async () => {
                 // console.log(`Topic ${bufferInfo.topic} takes up ${total_size}/${bufferInfo.maxSize} bytes`);
                 if (total_size > bufferInfo.maxSize) {
                     const numToDelete = Math.ceil((total_size - bufferInfo.maxSize) / packetSize);
-                    // console.log(`Deleteing ${numToDelete} packets for ${total_size}`);
+                    // console.log(`Deleting ${numToDelete} packets for ${total_size}`);
                     const idsForDeletion = await DataPacket.find({ topic: bufferInfo.topic }).sort({ 'created': 1 }).limit(numToDelete).select("_id").exec();
                     DataPacket.deleteMany({ _id: { $in: idsForDeletion } }).exec();
                 }
@@ -92,7 +92,7 @@ export const removePacketsOverMemLimit = async () => {
     }
 }
 
-export const updateTopicSubsriptions = async (client: MqttClient) => {
+export const updateTopicSubscriptions = async (client: MqttClient) => {
     const newTopicBufferInfos = (await BufferInfoModel.find()) as DBTopicInfo[];
     var oldTopics = [] as string[];
     if (topicBufferInfos)
@@ -118,5 +118,5 @@ export const updateTopicSubsriptions = async (client: MqttClient) => {
 export default (client: MqttClient) => {
     setInterval(removeExpiredPackets, 1000);
     setInterval(removePacketsOverMemLimit, 1000);
-    setInterval(() => updateTopicSubsriptions(client), 1000);
+    setInterval(() => updateTopicSubscriptions(client), 1000);
 }

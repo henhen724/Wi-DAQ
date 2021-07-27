@@ -1,6 +1,5 @@
 import { models } from 'mongoose';
 import { prop, modelOptions, getModelForClass, ReturnModelType, queryMethod } from '@typegoose/typegoose';
-import { QueryMethod } from '@typegoose/typegoose/lib/types';
 import { UnionPanelSettings } from '../../components/Panel/index';
 import crypto from 'crypto';
 import { sign } from 'jsonwebtoken';
@@ -42,7 +41,7 @@ export class User {
             .toString('hex');
     }
     public generateJWT() {
-        if (!process.env.TOKEN_SECRET) throw new Error("Server token secret is not intialized.");
+        if (!process.env.TOKEN_SECRET) throw new Error("Server token secret is not initialized.");
         return sign({
             id: this._id,
             email: this.email,

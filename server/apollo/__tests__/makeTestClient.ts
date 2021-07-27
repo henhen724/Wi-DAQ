@@ -8,8 +8,8 @@ let server: any, query: any, mutate: any;
 export { server, query, mutate };
 
 const makeTestClient = async () => {
-    dotenv.config({ path: './.env.local' });
-    await mongoose.connect(`${process.env.MONGODB_PROTO}${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_DOMAIN}`, { useNewUrlParser: true, useUnifiedTopology: true });
+    dotenv.config();
+    await mongoose.connect(`${process.env.MONGODB_URI}`, { useNewUrlParser: true, useUnifiedTopology: true });
     const schema = await makeSchema();
     expect(schema).toBeDefined();
     if (schema) {

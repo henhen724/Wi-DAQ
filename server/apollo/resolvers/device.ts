@@ -5,6 +5,7 @@ import { GraphQLJSON, GraphQLIPv4 } from "graphql-scalars"
 import DeviceModel, { deviceSchema } from "../../models/Device";
 import SuccessBoolean from '../types/SuccessBoolean';
 import { UserInputError } from 'apollo-server';
+import { CallbackError } from 'mongoose';
 
 @ObjectType()
 class Device {
@@ -60,8 +61,8 @@ class DeviceResolver {
 
     @Mutation(returns => SuccessBoolean, { description: "This route allows the worker to tell the server that a device has connected.  You do not need to call this route to connect a device." })
     async connect(@Args() device: ConnInput, @PubSub("CONNECT") publish: Publisher<Device>) {
-        await DeviceModel.updateOne({ ip: device.ip }, device, (err: string | undefined, deviceM: any) => {
-            if (err) throw new UserInputError(err);
+        await DeviceModel.updateOne({ ip: device.ip }, device, {}, (err: CallbackError | undefined, deviceM: any) => {
+            if (err) throw new UserInputError(err.message);
             publish(deviceM.toObject());
         }).exec();
 
@@ -69,7 +70,7 @@ class DeviceResolver {
     }
     @Mutation(returns => SuccessBoolean, { description: "This route allows the worker to tell the server that a device has disconnected.  You do not need to call this route." })
     async disconnectByIp(@Arg("ip", type => GraphQLIPv4) ip: string, @PubSub("DISCONNECT") publish: Publisher<string>) {
-        await DeviceModel.updateOne({ ip }, { connected: false }, (err: any) => {
+        await DeviceModel.updateOne({ ip }, { connected: false }, {}, (err: any) => {
             if (err) throw new UserInputError(err);
         }).exec();
         publish(ip);
