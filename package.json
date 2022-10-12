@@ -20,7 +20,7 @@
     "@material-ui/icons": "^4.9.1",
     "@typegoose/typegoose": "^7.4.1",
     "apollo-link-schema": "^1.2.5",
-    "apollo-server": "^2.15.0-alpha.1",
+    "apollo-server": "^2.25.4",
     "aws-sdk": "^2.824.0",
     "bootstrap": "^4.5.0",
     "bson": "^4.0.4",
