@@ -39,7 +39,7 @@
     "jquery": "^3.5.1",
     "json-schema": "^0.2.5",
     "json2csv": "^5.0.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "luxon": "^1.25.0",
     "material-table": "1.67.1",
     "mongoose": "^5.11.10",
