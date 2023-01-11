@@ -24,7 +24,7 @@
     "aws-sdk": "^2.824.0",
     "bootstrap": "^4.5.0",
     "bson": "^4.0.4",
-    "class-validator": "^0.12.2",
+    "class-validator": "^0.14.0",
     "cookie": "^0.4.1",
     "cross-env": "^7.0.2",
     "cross-fetch": "^3.0.6",
